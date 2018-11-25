@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+require_go="Please install go 1.10.3 binaries to build"
+which go &> /dev/null
+if [ $? -eq 1 ]
+then
+    echo ${require_go}
+    exit 1
+fi;
+
+go version | grep 'go1.10.3' o &> /dev/null
+
+if [ $? -eq 1 ]
+then
+    echo ${require_go}
+    exit 1
+fi;
+
+go install
+
+go test ./service -cover -coverprofile=profile.out
