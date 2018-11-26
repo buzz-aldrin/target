@@ -18,12 +18,12 @@ type Value string
 
 func (v *Value) Validate() (err error) {
 	if v == nil {
-		return errors.Errorf("missing product value")
+		return errors.Errorf("models_Value.Validate missing product value")
 	}
 
 	fVal, err := strconv.ParseFloat(string(*v), 64)
 	if err != nil {
-		return errors.Errorf("invalid product value:%s, err:%v", *v, err)
+		return errors.Errorf("models_Value.Validate invalid product value:%s, err:%v", *v, err)
 	}
 
 	tempVal := Value(fmt.Sprintf("%.2f", fVal))
@@ -36,11 +36,11 @@ type ProductID string
 
 func (pid ProductID) Validate() (err error) {
 	if len(pid) == 0 {
-		return errors.Errorf("missing product id")
+		return errors.Errorf("models_ProductID.Validate missing product id")
 	}
 
 	if _, err = strconv.Atoi(string(pid)); err != nil {
-		return errors.Errorf("invalid product id:%s, err:%v", pid, err)
+		return errors.Errorf("models_ProductID.Validate invalid product id:%s, err:%v", pid, err)
 	}
 	return
 }

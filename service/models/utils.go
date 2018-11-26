@@ -24,6 +24,15 @@ func (prod *Product) FindProduct(dbName string, prodID string) (err error) {
 
 func (prod *Product) UpsertProduct(dbName string) (err error) {
 	findQ := bson.M{"_id": prod.ID}
+
+	if err = prod.ID.Validate(); err != nil {
+		return errors.Wrap(err, "prod.UpsertProduct invalid product.ID")
+	}
+
+	if err = prod.CurrentPrice.Value.Validate(); err != nil {
+		return errors.Wrap(err, "prod.UpsertProduct invalid product.CurrentPrice.Value")
+	}
+
 	if err = dal.UpsertOne(dbName, prodCollName, findQ, prod); err != nil {
 		return errors.Wrap(err, "prod.UpsertProduct failed upsert product")
 	}
