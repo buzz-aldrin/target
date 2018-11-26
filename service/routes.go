@@ -32,7 +32,6 @@ func Router() (r *mux.Router) {
 	r = mux.NewRouter()
 	r.HandleFunc("/product/{id}", GetProductHandler).Methods(http.MethodGet)
 	r.HandleFunc("/product/{id}", PutProductHandler).Methods(http.MethodPut)
-	r.HandleFunc("/product", PostProductHandler).Methods(http.MethodPost)
 	r.HandleFunc("/product/{id}", DeleteProductHandler).Methods(http.MethodDelete)
 	return
 }

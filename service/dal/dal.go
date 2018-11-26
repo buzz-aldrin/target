@@ -3,8 +3,6 @@ package dal
 // Data access layer
 
 import (
-	"target/service/models"
-
 	"github.com/pkg/errors"
 	"github.com/prometheus/common/log"
 	"gopkg.in/mgo.v2"
@@ -19,7 +17,7 @@ func init() {
 	var err error
 	session, err = createSession()
 	if err != nil {
-		err = errors.Errorf("failed to connect to DB, err:%v", err)
+		err = errors.Wrap(err, "failed to connect to DB")
 		log.Fatal(err)
 	}
 }
@@ -30,25 +28,23 @@ func createSession() (*mgo.Session, error) {
 	return mgo.Dial("127.0.0.1")
 }
 
-func FindOne(dbName, collName string, selector, data interface{}) (prod *models.Product, err error) {
-	prod = new(models.Product)
-
+func FindOne(dbName, collName string, selector, data interface{}) (err error) {
 	session.Refresh()
 	c := session.DB(dbName).C(collName)
 
 	if err = c.Find(selector).One(data); err != nil {
-		return nil, errors.Errorf("findOne failed, selector:%+v, err:%v", selector, err)
+		return errors.Wrapf(err, "dal.FindOne failed, selector:%+v", selector)
 	}
 
 	return
 }
 
-func UpdateOne(dbName, collName string, selector, data interface{}) (err error) {
+func UpsertOne(dbName, collName string, selector, data interface{}) (err error) {
 	session.Refresh()
 	c := session.DB(dbName).C(collName)
 
-	if err = c.Update(selector, data); err != nil {
-		return errors.Errorf("updateOne failed, selector:%+v, data:%+v, err:%v", selector, data, err)
+	if _, err = c.Upsert(selector, data); err != nil {
+		return errors.Wrapf(err, "dal.UpsertOne failed, selector:%+v, data:%+v", selector, data)
 	}
 
 	return
@@ -59,7 +55,7 @@ func CreateOne(dbName, collName string, data interface{}) (err error) {
 	c := session.DB(dbName).C(collName)
 
 	if err = c.Insert(data); err != nil {
-		return errors.Errorf("createOne failed, data:%+v, err:%v", data, err)
+		return errors.Wrapf(err, "dal.createOne failed, data:%+v", data)
 	}
 
 	return
@@ -70,7 +66,7 @@ func DeleteOne(dbName, collName string, selector interface{}) (err error) {
 	c := session.DB(dbName).C(collName)
 
 	if err = c.Remove(selector); err != nil {
-		return errors.Errorf("deleteOne failed, selector:%+v, err:%v", selector, err)
+		return errors.Wrapf(err, "dal.deleteOne failed, selector:%+v", selector)
 	}
 
 	return
