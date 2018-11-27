@@ -18,4 +18,5 @@ fi;
 
 go install
 
-go test ./service -cover -coverprofile=profile.out
+go test ./service -cover -coverprofile=service_coverage.out
+go test ./models -cover -coverprofile=models_coverage.out

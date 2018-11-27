@@ -14,6 +14,7 @@ import (
 
 var dbName = "target"
 
+// GetProductHandler find a product and returns it in json format
 func GetProductHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	prodID := vars["id"]
@@ -32,11 +33,12 @@ func GetProductHandler(w http.ResponseWriter, r *http.Request) {
 		writeErrorResponse(w)
 		return
 	}
-	resp := ProductResp{Product: prod, Desc: prodDesc.Desc}
+	resp := productResp{Product: prod, Desc: prodDesc.Desc}
 
 	writeSuccessResponse(w, resp)
 }
 
+// PutProductHandler creates/updates a product and returns it in json format
 func PutProductHandler(w http.ResponseWriter, r *http.Request) {
 	prod := new(models.Product)
 	if err := json.NewDecoder(r.Body).Decode(prod); err != nil {
@@ -56,6 +58,7 @@ func PutProductHandler(w http.ResponseWriter, r *http.Request) {
 	writeSuccessResponse(w, prod)
 }
 
+// DeleteProductHandler deletes a product and returns it in json format
 func DeleteProductHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	prodID := vars["id"]

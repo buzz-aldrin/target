@@ -9,6 +9,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// Validate validates Value and returns formatted value
 func (v *Value) Validate() (formatted *Value, err error) {
 	if v == nil {
 		return nil, errors.Errorf("models_Value.Validate missing product value")
@@ -24,6 +25,7 @@ func (v *Value) Validate() (formatted *Value, err error) {
 	return &tempVal, err
 }
 
+// Validate validates ProductID
 func (pid ProductID) Validate() (err error) {
 	if len(pid) == 0 {
 		return errors.Errorf("models_ProductID.Validate missing product id")
@@ -35,6 +37,7 @@ func (pid ProductID) Validate() (err error) {
 	return
 }
 
+// Find find product identified by an id
 func (prod *Product) Find(dbName string, prodID string) (err error) {
 	findQ := bson.M{"_id": prodID}
 	if err = dal.FindOne(dbName, prodCollName, findQ, prod); err != nil {
@@ -43,6 +46,7 @@ func (prod *Product) Find(dbName string, prodID string) (err error) {
 	return
 }
 
+// Find find product description by product id
 func (prodDesc *ProductDesc) Find(dbName string, prodID string) (err error) {
 	findQ := bson.M{"_id": prodID}
 	if err = dal.FindOne(dbName, prodDescCollName, findQ, prodDesc); err != nil {
@@ -51,6 +55,7 @@ func (prodDesc *ProductDesc) Find(dbName string, prodID string) (err error) {
 	return
 }
 
+// Upsert create/update product
 func (prod *Product) Upsert(dbName string) (err error) {
 	findQ := bson.M{"_id": prod.ID}
 
@@ -68,6 +73,7 @@ func (prod *Product) Upsert(dbName string) (err error) {
 	return
 }
 
+// Delete deletes a product identified by an id
 func (prod *Product) Delete(dbName string, prodID string) (err error) {
 	findQ := bson.M{"_id": prodID}
 	if err = dal.DeleteOne(dbName, prodCollName, findQ); err != nil {

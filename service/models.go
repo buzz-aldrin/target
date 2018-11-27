@@ -2,7 +2,7 @@ package service
 
 import "target/models"
 
-type ProductResp struct {
+type productResp struct {
 	*models.Product
 	Desc string `json:"product_desc"`
 }

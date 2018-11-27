@@ -12,7 +12,7 @@ var (
 	session *mgo.Session
 )
 
-// create a global session and reuse it.
+// create a global session and reuse it
 func init() {
 	var err error
 	session, err = createSession()
@@ -22,12 +22,13 @@ func init() {
 	}
 }
 
-// creates a new session object
+// creates a new session document
 func createSession() (*mgo.Session, error) {
 	// connect to mongodb
 	return mgo.Dial("127.0.0.1")
 }
 
+// FindOne find a single object using the selector
 func FindOne(dbName, collName string, selector, data interface{}) (err error) {
 	session.Refresh()
 	c := session.DB(dbName).C(collName)
@@ -39,6 +40,7 @@ func FindOne(dbName, collName string, selector, data interface{}) (err error) {
 	return
 }
 
+// UpsertOne updates/create a single document
 func UpsertOne(dbName, collName string, selector, data interface{}) (err error) {
 	session.Refresh()
 	c := session.DB(dbName).C(collName)
@@ -50,6 +52,7 @@ func UpsertOne(dbName, collName string, selector, data interface{}) (err error) 
 	return
 }
 
+// CreateOne create a single document
 func CreateOne(dbName, collName string, data interface{}) (err error) {
 	session.Refresh()
 	c := session.DB(dbName).C(collName)
@@ -61,6 +64,7 @@ func CreateOne(dbName, collName string, data interface{}) (err error) {
 	return
 }
 
+// DeleteOne deletes a single document
 func DeleteOne(dbName, collName string, selector interface{}) (err error) {
 	session.Refresh()
 	c := session.DB(dbName).C(collName)
